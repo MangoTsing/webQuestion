@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">  
+<html>  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+<title>json</title>  
+<script type="text/javascript">  
+var str = '奴隶社会,非洲,古埃及文明,金字塔,亚洲,两河流域文明,汉谟拉比法典,,古印度,种姓制度,,,佛教的创立,欧洲,希腊,希腊城邦,,,雅典民主,,罗马,城邦,,,帝国的征服与扩展,,希腊罗马古典文化,建筑艺术,,,公历';
+
+//console.log(str);
+
+function str2json(str) {
+	//数组去重
+	Array.prototype.quchong = function() {
+		var res = [];
+		var json = {};
+		for (var i = 0; i < this.length; i++) {
+			if (!json[this[i]]) {
+				res.push(this[i]);
+				json[this[i]] = 1;
+			}
+		}
+		return res;
+	}
+
+	var str1 = str.split(',', str.length);
+	var json1 = [];
+	var json2 = [];
+	var json3 = [];
+	//把1级，2级，3级分开
+	var json = str1.map(function(index, elem) {
+		if (index) {
+			var str = index;
+			if (str.charAt(str.length - 1) == '洲') {
+				json3.push(str1[elem + 2]);
+				//三级元素
+				json2.push(str1[elem + 1]);
+				//二级元素
+				json1.push(str);
+				console.log(str);
+				return index
+				//挑出亚洲，非洲等一级元素
+			}
+			return index 	;
+		} else {
+			if (str1[elem + 1] && str1[elem - 1]) {
+				//二级元素
+
+				json2.push(str1[elem + 1]);
+			} else if (!str1[elem + 1] && str1[elem - 1]) {
+				//三级元素
+				json3.push(str1[elem - 1]);
+				json3.push(str1[elem + 2]);
+			}
+		}
+
+	});
+	console.log(json);
+	console.log(json1);
+	console.log(json2);
+	console.log(json3);
+	var json3=json3.quchong();
+	console.log(json3);
+	//三级元素去重
+	getJson();
+	function getJson() {
+		var result = "{"+"\""+json[0]+"\""+":[{"+"\""+json1[0]+"\""+":[{"+"\""+json2[0]+"\":"+"\""+json3[0]+"\""+"}]" +"},{\""+json1[1]+"\":[{"+"\""+json2[1]+"\":"+"\""+json3[1]+"\","+"\""+json2[2]+"\":"+"[\""+json3[2]+"\","+"\""+json3[3]+"\"]"+"}]},{\""+json1[2]+"\":[{"+"\""+json2[3]+"\":"+"[\""+json3[4]+"\","+"\""+json3[5]+"\"],"+"\""+json2[4]+"\":"+"[\""+json3[6]+"\","+"\""+json3[7]+"\"],"+"\""+json2[5]+"\":["+"\""+json3[8]+"\","+"\""+json3[9]+"\""+"]"+"}]}"+"]}"
+		console.log(result);
+		alert(result);
+	}
+}
+</script>  
+</head>  
+<body>  
+<h1 >字符串拼接成JSON</h1>  
+<input type="button" onclick="str2json(str)" value="拼接生成JSON">  
+</body>  
+</html>   
